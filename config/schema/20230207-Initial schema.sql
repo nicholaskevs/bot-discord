@@ -12,6 +12,7 @@ CREATE TABLE `messages` (
 	`channel_id` INT(11) UNSIGNED NOT NULL,
 	`discord_id` VARCHAR(18) NOT NULL,
 	`author` VARCHAR(100) NOT NULL,
-	`content` VARCHAR(2000) NOT NULL
+	`content` VARCHAR(2000) NOT NULL,
+	`forwardedOn` DATETIME NULL,
 	PRIMARY KEY (`id`)
 );

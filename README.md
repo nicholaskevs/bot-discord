@@ -19,4 +19,4 @@ Simple Discord bot to save message content to database
 5. Change `cons.php-template` into `cons.php`
 6. Fill in `cons.php` with your data
 7. Run `20230207-Initial schema.sql` in `schema` folder
-8. Run `php silentbot.php` or open `silentbot.bat` for windows
+8. Run `php discordbot.php` or open `discordbot.bat` for windows

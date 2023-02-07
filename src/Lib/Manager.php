@@ -17,8 +17,21 @@ Class Manager
 		]);
 	}
 	
-	public static function saveMessage(Message $message) {
+	public static function getChannel(String $discord_id) {
 		$conn = self::dbConnect();
-		$conn->insert('messages', ['content'=>$message->content]);
+		$channels = $conn->select('channels', '*', ['discord_id'=>$discord_id]);
+		
+		return empty($channels) ? false : $channels[0];
+	}
+	
+	public static function saveMessage(Int $channel_id, Message $message) {
+		$conn = self::dbConnect();
+		$conn->insert('messages', [
+			'channel_id'	=> $channel_id,
+			'discord_id'	=> $message->id,
+			'author'		=> $message->author->username,
+			'content'		=> $message->content
+		]);
+		
 	}
 }
