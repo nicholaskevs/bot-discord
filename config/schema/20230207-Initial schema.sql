@@ -1,0 +1,17 @@
+
+CREATE TABLE `channels` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`discord_id` VARCHAR(18) NOT NULL,
+	`name` VARCHAR(100) NOT NULL,
+	`type` TINYINT(2) NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `messages` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`channel_id` INT(11) UNSIGNED NOT NULL,
+	`discord_id` VARCHAR(18) NOT NULL,
+	`author` VARCHAR(100) NOT NULL,
+	`content` VARCHAR(2000) NOT NULL
+	PRIMARY KEY (`id`)
+);
