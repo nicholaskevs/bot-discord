@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `channels`;
 CREATE TABLE `channels` (
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`discord_id` VARCHAR(25) NOT NULL,
-	`name` VARCHAR(100) NOT NULL,
+	`name` VARCHAR(100) NULL,
 	`type` TINYINT(2) NOT NULL,
 	PRIMARY KEY (`id`)
 );
@@ -16,7 +16,7 @@ CREATE TABLE `messages` (
 	`author` VARCHAR(100) NOT NULL,
 	`content` VARCHAR(2000) NOT NULL,
 	`type` TINYINT(2) NOT NULL,
-	`flags` TINYINT(2) NOT NULL,
+	`flags` TINYINT(2) NULL,
 	`timestamp` DATETIME NOT NULL,
 	`forwarded_on` DATETIME NULL,
 	PRIMARY KEY (`id`)
