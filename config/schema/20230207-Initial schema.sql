@@ -1,4 +1,5 @@
 
+DROP TABLE IF EXISTS `channels`;
 CREATE TABLE `channels` (
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`discord_id` VARCHAR(25) NOT NULL,
@@ -7,12 +8,19 @@ CREATE TABLE `channels` (
 	PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`channel_id` INT(11) UNSIGNED NOT NULL,
 	`discord_id` VARCHAR(25) NOT NULL,
 	`author` VARCHAR(100) NOT NULL,
 	`content` VARCHAR(2000) NOT NULL,
-	`forwardedOn` DATETIME NULL,
+	`type` TINYINT(2) NOT NULL,
+	`flags` TINYINT(2) NOT NULL,
+	`timestamp` DATETIME NOT NULL,
+	`forwarded_on` DATETIME NULL,
+	PRIMARY KEY (`id`)
+);
+
 	PRIMARY KEY (`id`)
 );
