@@ -22,5 +22,26 @@ CREATE TABLE `messages` (
 	PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `embeds`;
+CREATE TABLE `embeds` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`message_id` INT(11) UNSIGNED NOT NULL,
+	`url` VARCHAR(250) NULL,
+	`author` VARCHAR(256) NULL,
+	`title` VARCHAR(256) NULL,
+	`description` VARCHAR(4096) NULL,
+	`footer` VARCHAR(2048) NULL,
+	`image` VARCHAR(250) NULL,
+	`video` VARCHAR(250) NULL,
+	`timestamp` DATETIME NULL,
+	PRIMARY KEY (`id`)
+);
+
+DROP TABLE IF EXISTS `embed_fields`;
+CREATE TABLE `embed_fields` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`embed_id` INT(11) UNSIGNED NOT NULL,
+	`name` VARCHAR(256) NOT NULL,
+	`value` VARCHAR(1024) NOT NULL,
 	PRIMARY KEY (`id`)
 );
