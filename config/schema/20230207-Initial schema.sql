@@ -17,7 +17,7 @@ CREATE TABLE `messages` (
 	`content` VARCHAR(2000) NOT NULL,
 	`type` TINYINT(2) NOT NULL,
 	`flags` TINYINT(2) NULL,
-	`timestamp` DATETIME NOT NULL,
+	`timestamp` INT(11) NOT NULL,
 	`forwarded_on` DATETIME NULL,
 	PRIMARY KEY (`id`)
 );
@@ -33,7 +33,7 @@ CREATE TABLE `embeds` (
 	`footer` VARCHAR(2048) NULL,
 	`image` VARCHAR(250) NULL,
 	`video` VARCHAR(250) NULL,
-	`timestamp` DATETIME NULL,
+	`timestamp` INT(11) NULL,
 	PRIMARY KEY (`id`)
 );
 

@@ -33,7 +33,7 @@ Class Manager
 			'content'		=> $message->content,
 			'type'			=> $message->type,
 			'flags'			=> $message->flags,
-			'timestamp'		=> $message->timestamp->setTimezone(date_default_timezone_get())->toDateTimeString()
+			'timestamp'		=> $message->timestamp->getTimestamp()
 		]);
 		$message_id = $conn->id();
 		
@@ -48,7 +48,7 @@ Class Manager
 					'footer'		=> $embed->footer->text,
 					'image'			=> $embed->image->url,
 					'video'			=> $embed->video->url,
-					'timestamp'		=> $embed->timestamp->setTimezone(date_default_timezone_get())->toDateTimeString()
+					'timestamp'		=> $embed->timestamp ? $embed->timestamp->getTimestamp() : null
 				]);
 				$embed_id = $conn->id();
 				
