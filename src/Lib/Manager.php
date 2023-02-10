@@ -32,13 +32,13 @@ Class Manager
 	}
 	
 	public static function saveMessage(Message $message, Bool $edit = false) {
-		$conn = self::dbConnect();
+		$db = self::dbConnect();
 		
-		$channels = $conn->select('channels', '*', ['discord_id'=>$message->channel_id]);
+		$channels = $db->select('channels', '*', ['discord_id'=>$message->channel_id]);
 		
 		if(empty($channels)) return false;
 		
-		$conn->insert('messages', [
+		$db->insert('messages', [
 			'channel_id'		=> $channels[0]['id'],
 			'discord_id'		=> $message->id,
 			'author'			=> $message->author->username,
@@ -48,11 +48,11 @@ Class Manager
 			'timestamp'			=> $message->timestamp->getTimestamp(),
 			'edited_timestamp'	=> ($edit ? $message->edited_timestamp->getTimestamp() : null)
 		]);
-		$message_id = $conn->id();
+		$message_id = $db->id();
 		
 		if($message->embeds->count()) {
 			foreach($message->embeds as $embed) {
-				$conn->insert('embeds', [
+				$db->insert('embeds', [
 					'message_id'	=> $message_id,
 					'url'			=> $embed->url,
 					'author'		=> $embed->author->name,
@@ -63,11 +63,11 @@ Class Manager
 					'video'			=> $embed->video->url,
 					'timestamp'		=> $embed->timestamp ? $embed->timestamp->getTimestamp() : null
 				]);
-				$embed_id = $conn->id();
+				$embed_id = $db->id();
 				
 				if($embed->fields->count()) {
 					foreach($embed->fields as $embedField) {
-						$conn->insert('embed_fields', [
+						$db->insert('embed_fields', [
 							'embed_id'	=> $embed_id,
 							'name'		=> $embedField->name,
 							'value'		=> $embedField->value
