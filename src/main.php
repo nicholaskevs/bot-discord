@@ -7,9 +7,12 @@ use DiscordBot\Lib\Manager;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
+use Discord\WebSockets\Intents;
 
 $bot = new Discord([
-	'token' => BOT_TOKEN
+	'token'		=> BOT_TOKEN,
+	'intents'	=> Intents::getDefaultIntents() | Intents::MESSAGE_CONTENT,
+	'logger'	=> Manager::getLogger()
 ]);
 
 $bot->on('ready', function (Discord $bot) {

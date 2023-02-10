@@ -4,3 +4,4 @@ composer.phar
 
 # bot
 /config/cons.php
+/logs/

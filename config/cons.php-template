@@ -1,6 +1,8 @@
 <?php
 
-define('BOT_NAME', 'SilentBot');
+define('ENV_DEV', true);
+
+define('BOT_NAME', 'DiscordBot');
 define('BOT_TOKEN', 'your_bot_token');
 
 define('GUILD_ID', 'your_guild_id');

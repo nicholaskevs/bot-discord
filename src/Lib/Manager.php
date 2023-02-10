@@ -4,6 +4,9 @@ namespace DiscordBot\Lib;
 
 use Discord\Parts\Channel\Message;
 use Medoo\Medoo;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 Class Manager
 {
@@ -15,6 +18,17 @@ Class Manager
 			'password'	=> DB_PASSWORD,
 			'database'	=> DB_DBNAME
 		]);
+	}
+	
+	public static function getLogger() {
+		$logger = new Logger('Logger');
+		if(ENV_DEV) {
+			$logger->pushHandler(new StreamHandler('php://stdout'));
+		} else {
+			$logger->pushHandler(new RotatingFileHandler('logs/discordbot.log', 7, Logger::INFO));
+		}
+		
+		return $logger;
 	}
 	
 	public static function getChannel(String $discord_id) {
