@@ -20,6 +20,10 @@ $bot->on('ready', function (Discord $bot) {
 	$bot->on(Event::MESSAGE_CREATE, function (Message $message) {
 		Manager::saveMessage($message);
 	});
+	
+	$bot->on(Event::MESSAGE_UPDATE, function (Message $message) {
+		Manager::saveMessage($message, true);
+	});
 });
 
 $bot->run();

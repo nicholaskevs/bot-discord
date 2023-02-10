@@ -31,7 +31,7 @@ Class Manager
 		return $logger;
 	}
 	
-	public static function saveMessage(Message $message) {
+	public static function saveMessage(Message $message, Bool $edit = false) {
 		$conn = self::dbConnect();
 		
 		$channels = $conn->select('channels', '*', ['discord_id'=>$message->channel_id]);
@@ -39,13 +39,14 @@ Class Manager
 		if(empty($channels)) return false;
 		
 		$conn->insert('messages', [
-			'channel_id'	=> $channels[0]['id'],
-			'discord_id'	=> $message->id,
-			'author'		=> $message->author->username,
-			'content'		=> $message->content,
-			'type'			=> $message->type,
-			'flags'			=> $message->flags,
-			'timestamp'		=> $message->timestamp->getTimestamp()
+			'channel_id'		=> $channels[0]['id'],
+			'discord_id'		=> $message->id,
+			'author'			=> $message->author->username,
+			'content'			=> $message->content,
+			'type'				=> $message->type,
+			'flags'				=> $message->flags,
+			'timestamp'			=> $message->timestamp->getTimestamp(),
+			'edited_timestamp'	=> ($edit ? $message->edited_timestamp->getTimestamp() : null)
 		]);
 		$message_id = $conn->id();
 		

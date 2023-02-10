@@ -18,6 +18,7 @@ CREATE TABLE `messages` (
 	`type` TINYINT(2) NOT NULL,
 	`flags` TINYINT(2) NULL,
 	`timestamp` INT(11) NOT NULL,
+	`edited_timestamp` INT(11) NULL,
 	`forwarded_on` DATETIME NULL,
 	PRIMARY KEY (`id`)
 );
