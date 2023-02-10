@@ -21,7 +21,7 @@ Class Manager
 		]);
 	}
 	
-	public static function getLogger() {
+	public static function createLogger() {
 		$logger = new Logger('Logger');
 		if(ENV_DEV) {
 			$logger->pushHandler(new StreamHandler('php://stdout'));
