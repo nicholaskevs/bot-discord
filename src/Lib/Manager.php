@@ -2,6 +2,7 @@
 
 namespace DiscordBot\Lib;
 
+use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Medoo\Medoo;
 use Monolog\Handler\RotatingFileHandler;
@@ -29,6 +30,26 @@ Class Manager
 		}
 		
 		return $logger;
+	}
+	
+	public static function updateChannel(Discord $bot) {
+		$db = self::dbConnect();
+		
+		$channels = $db->select('channels', '*');
+		$updated = 0;
+		
+		foreach($channels as $channel) {
+			if($update = $bot->getChannel($channel['discord_id'])) {
+				$db->update('channels', [
+					'name' => $update->name
+				], [
+					'id'=>$channel['id']
+				]);
+				$updated++;
+			}
+		}
+		
+		$bot->getLogger()->info('channel updated', ['totalChannel'=>count($channels), 'updated'=>$updated]);
 	}
 	
 	public static function saveMessage(Message $message, Bool $edit = false) {
