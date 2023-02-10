@@ -31,17 +31,15 @@ Class Manager
 		return $logger;
 	}
 	
-	public static function getChannel(String $discord_id) {
+	public static function saveMessage(Message $message) {
 		$conn = self::dbConnect();
-		$channels = $conn->select('channels', '*', ['discord_id'=>$discord_id]);
 		
-		return empty($channels) ? false : $channels[0];
-	}
-	
-	public static function saveMessage(Int $channel_id, Message $message) {
-		$conn = self::dbConnect();
+		$channels = $conn->select('channels', '*', ['discord_id'=>$message->channel_id]);
+		
+		if(empty($channels)) return false;
+		
 		$conn->insert('messages', [
-			'channel_id'	=> $channel_id,
+			'channel_id'	=> $channels[0]['id'],
 			'discord_id'	=> $message->id,
 			'author'		=> $message->author->username,
 			'content'		=> $message->content,
@@ -77,5 +75,7 @@ Class Manager
 				}
 			}
 		}
+		
+		return true;
 	}
 }

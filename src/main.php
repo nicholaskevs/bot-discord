@@ -18,9 +18,7 @@ $bot = new Discord([
 $bot->on('ready', function (Discord $bot) {
 	
 	$bot->on(Event::MESSAGE_CREATE, function (Message $message) {
-		if($channel = Manager::getChannel($message->channel_id)) {
-			Manager::saveMessage($channel['id'], $message);
-		}
+		Manager::saveMessage($message);
 	});
 });
 
