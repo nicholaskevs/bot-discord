@@ -16,10 +16,10 @@ CREATE TABLE `messages` (
 	`author` VARCHAR(100) NOT NULL,
 	`content` VARCHAR(2000) NOT NULL,
 	`type` TINYINT(2) NOT NULL,
-	`flags` TINYINT(2) NULL,
+	`flags` INT(11) NULL,
 	`timestamp` INT(11) NOT NULL,
 	`edited_timestamp` INT(11) NULL,
-	`forwarded_on` DATETIME NULL,
+	`forwarded_on` INT(11) NULL,
 	PRIMARY KEY (`id`)
 );
 
