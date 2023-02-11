@@ -49,6 +49,7 @@ Class Manager
 			}
 		}
 		
+		unset($db);
 		$bot->getLogger()->info('channel updated', ['totalChannel'=>count($channels), 'updated'=>$updated]);
 	}
 	
@@ -57,7 +58,10 @@ Class Manager
 		
 		$channels = $db->select('channels', '*', ['discord_id'=>$message->channel_id]);
 		
-		if(empty($channels)) return false;
+		if(empty($channels)) {
+			unset($db);
+			return false;
+		}
 		
 		$db->insert('messages', [
 			'channel_id'		=> $channels[0]['id'],
@@ -106,6 +110,7 @@ Class Manager
 			]);
 		}
 		
+		unset($db);
 		return true;
 	}
 }
