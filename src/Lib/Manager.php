@@ -71,30 +71,26 @@ Class Manager
 		]);
 		$message_id = $db->id();
 		
-		if($message->embeds->count()) {
-			foreach($message->embeds as $embed) {
-				$db->insert('embeds', [
-					'message_id'	=> $message_id,
-					'url'			=> $embed->url,
-					'author'		=> $embed->author->name,
-					'title'			=> $embed->title,
-					'description'	=> $embed->description,
-					'footer'		=> $embed->footer->text,
-					'image'			=> $embed->image->url,
-					'video'			=> $embed->video->url,
-					'timestamp'		=> $embed->timestamp ? $embed->timestamp->getTimestamp() : null
+		foreach($message->embeds as $embed) {
+			$db->insert('embeds', [
+				'message_id'	=> $message_id,
+				'url'			=> $embed->url,
+				'author'		=> $embed->author->name,
+				'title'			=> $embed->title,
+				'description'	=> $embed->description,
+				'footer'		=> $embed->footer->text,
+				'image'			=> $embed->image->url,
+				'video'			=> $embed->video->url,
+				'timestamp'		=> $embed->timestamp ? $embed->timestamp->getTimestamp() : null
+			]);
+			$embed_id = $db->id();
+			
+			foreach($embed->fields as $embedField) {
+				$db->insert('embed_fields', [
+					'embed_id'	=> $embed_id,
+					'name'		=> $embedField->name,
+					'value'		=> $embedField->value
 				]);
-				$embed_id = $db->id();
-				
-				if($embed->fields->count()) {
-					foreach($embed->fields as $embedField) {
-						$db->insert('embed_fields', [
-							'embed_id'	=> $embed_id,
-							'name'		=> $embedField->name,
-							'value'		=> $embedField->value
-						]);
-					}
-				}
 			}
 		}
 		
