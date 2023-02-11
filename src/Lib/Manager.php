@@ -98,6 +98,18 @@ Class Manager
 			}
 		}
 		
+		foreach($message->attachments as $attachment) {
+			$db->insert('attachments', [
+				'message_id'	=> $message_id,
+				'discord_id'	=> $attachment->id,
+				'url'			=> $attachment->url,
+				'content_type'	=> $attachment->content_type,
+				'filename'		=> $attachment->filename,
+				'description'	=> $attachment->description,
+				'size'			=> $attachment->size
+			]);
+		}
+		
 		return true;
 	}
 }

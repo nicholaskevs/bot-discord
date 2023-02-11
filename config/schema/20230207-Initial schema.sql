@@ -46,3 +46,16 @@ CREATE TABLE `embed_fields` (
 	`value` VARCHAR(1024) NOT NULL,
 	PRIMARY KEY (`id`)
 );
+
+DROP TABLE IF EXISTS `attachments`;
+CREATE TABLE `attachments` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`message_id` INT(11) UNSIGNED NOT NULL,
+	`discord_id` VARCHAR(25) NOT NULL,
+	`url` VARCHAR(250) NOT NULL,
+	`content_type` VARCHAR(255) NULL,
+	`filename` VARCHAR(256) NOT NULL,
+	`description` VARCHAR(1024) NULL,
+	`size` INT(11) NOT NULL,
+	PRIMARY KEY (`id`)
+);
