@@ -4,7 +4,10 @@ CREATE TABLE `channels` (
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`discord_id` VARCHAR(25) NOT NULL,
 	`name` VARCHAR(100) NULL,
-	`type` TINYINT(2) NOT NULL,
+	`topic` VARCHAR(4096) NULL,
+	`type` TINYINT(2) NOT NULL DEFAULT 0,
+	`flags` INT(11) NULL,
+	`nsfw` TINYINT(1) NULL,
 	PRIMARY KEY (`id`)
 );
 

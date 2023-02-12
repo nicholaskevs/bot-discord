@@ -32,7 +32,7 @@ Class Manager
 		return $logger;
 	}
 	
-	public static function updateChannel(Discord $bot) {
+	public static function updateChannels(Discord $bot) {
 		$db = self::dbConnect();
 		
 		$channels = $db->select('channels', '*');
@@ -41,7 +41,11 @@ Class Manager
 		foreach($channels as $channel) {
 			if($update = $bot->getChannel($channel['discord_id'])) {
 				$db->update('channels', [
-					'name' => $update->name
+					'name'	=> $update->name,
+					'topic'	=> $update->topic,
+					'type'	=> $update->type,
+					'flags'	=> $update->flags,
+					'nsfw'	=> $update->nsfw
 				], [
 					'id'=>$channel['id']
 				]);
