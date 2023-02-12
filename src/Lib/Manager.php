@@ -67,6 +67,33 @@ Class Manager
 			return false;
 		}
 		
+		if($db->has('users', ['discord_id'=>$message->author->id, 'ignore'=>true])) {
+			unset($db);
+			return false;
+		}
+		
+		if($db->has('users', ['discord_id'=>$message->author->id])) {
+			$db->update('users', [
+				'username'		=> $message->author->username,
+				'discriminator'	=> $message->author->discriminator,
+				'avatar'		=> $message->author->avatar,
+				'banner'		=> $message->author->banner
+			], [
+				'discord_id'	=> $message->author->id
+			]);
+		} else {
+			$db->insert('users', [
+				'discord_id'	=> $message->author->id,
+				'username'		=> $message->author->username,
+				'discriminator'	=> $message->author->discriminator,
+				'avatar'		=> $message->author->avatar,
+				'banner'		=> $message->author->banner,
+				'bot'			=> $message->author->bot,
+				'webhook'		=> ($message->webhook_id ? true : false),
+				'ignore'		=> false
+			]);
+		}
+		
 		$db->insert('messages', [
 			'channel_id'		=> $channels[0]['id'],
 			'discord_id'		=> $message->id,
