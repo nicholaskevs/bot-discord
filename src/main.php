@@ -3,7 +3,6 @@
 require dirname(__DIR__).'/vendor/autoload.php';
 require dirname(__DIR__).'/config/cons.php';
 
-use Discord\Builders\MessageBuilder;
 use DiscordBot\Lib\Manager;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
