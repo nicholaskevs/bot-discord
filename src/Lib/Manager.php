@@ -45,7 +45,7 @@ Class Manager
 					'topic'	=> $update->topic,
 					'type'	=> $update->type,
 					'flags'	=> $update->flags,
-					'nsfw'	=> $update->nsfw
+					'nsfw'	=> ($update->nsfw ? true : false)
 				], [
 					'id' => $channel['id']
 				]);
@@ -88,7 +88,7 @@ Class Manager
 				'discriminator'	=> $message->author->discriminator,
 				'avatar'		=> $message->author->avatar,
 				'banner'		=> $message->author->banner,
-				'bot'			=> $message->author->bot,
+				'bot'			=> ($message->author->bot ? true : false),
 				'webhook'		=> ($message->webhook_id ? true : false),
 				'ignore'		=> false
 			]);

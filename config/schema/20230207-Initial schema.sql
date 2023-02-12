@@ -21,7 +21,7 @@ CREATE TABLE `channels` (
 	`topic` VARCHAR(4096) NULL,
 	`type` TINYINT(2) NOT NULL DEFAULT 0,
 	`flags` INT(11) NULL,
-	`nsfw` TINYINT(1) NULL,
+	`nsfw` TINYINT(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 );
 
