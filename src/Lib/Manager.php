@@ -57,7 +57,7 @@ Class Manager
 		$bot->getLogger()->info('channel updated', ['totalChannel'=>count($channels), 'updated'=>$updated]);
 	}
 	
-	public static function saveMessage(Message $message, Bool $edit = false) {
+	public static function saveMessage(Message $message) {
 		$db = self::dbConnect();
 		
 		$channels = $db->select('channels', '*', ['discord_id'=>$message->channel_id]);
@@ -102,7 +102,7 @@ Class Manager
 			'type'				=> $message->type,
 			'flags'				=> $message->flags,
 			'timestamp'			=> $message->timestamp->getTimestamp(),
-			'edited_timestamp'	=> ($edit ? $message->edited_timestamp->getTimestamp() : null)
+			'edited_timestamp'	=> (is_null($message->edited_timestamp) ? null : $message->edited_timestamp->getTimestamp())
 		]);
 		$message_id = $db->id();
 		
