@@ -47,7 +47,7 @@ Class Manager
 					'flags'	=> $update->flags,
 					'nsfw'	=> $update->nsfw
 				], [
-					'id'=>$channel['id']
+					'id' => $channel['id']
 				]);
 				$updated++;
 			}
@@ -60,9 +60,9 @@ Class Manager
 	public static function saveMessage(Message $message) {
 		$db = self::dbConnect();
 		
-		$channels = $db->select('channels', '*', ['discord_id'=>$message->channel_id]);
+		$channel_id = $db->get('channels', 'id', ['discord_id'=>$message->channel_id]);
 		
-		if(empty($channels)) {
+		if(is_null($channel_id)) {
 			unset($db);
 			return false;
 		}
@@ -72,14 +72,14 @@ Class Manager
 			return false;
 		}
 		
-		if($db->has('users', ['discord_id'=>$message->author->id])) {
+		if($user_id = $db->get('users', 'id', ['discord_id'=>$message->author->id])) {
 			$db->update('users', [
 				'username'		=> $message->author->username,
 				'discriminator'	=> $message->author->discriminator,
 				'avatar'		=> $message->author->avatar,
 				'banner'		=> $message->author->banner
 			], [
-				'discord_id'	=> $message->author->id
+				'id' => $user_id
 			]);
 		} else {
 			$db->insert('users', [
@@ -95,14 +95,14 @@ Class Manager
 		}
 		
 		$db->insert('messages', [
-			'channel_id'		=> $channels[0]['id'],
+			'channel_id'		=> $channel_id,
 			'discord_id'		=> $message->id,
 			'author'			=> $message->author->username,
 			'content'			=> $message->content,
 			'type'				=> $message->type,
 			'flags'				=> $message->flags,
 			'timestamp'			=> $message->timestamp->getTimestamp(),
-			'edited_timestamp'	=> (is_null($message->edited_timestamp) ? null : $message->edited_timestamp->getTimestamp())
+			'edited_timestamp'	=> ($message->edited_timestamp ? $message->edited_timestamp->getTimestamp() : null)
 		]);
 		$message_id = $db->id();
 		
@@ -116,7 +116,7 @@ Class Manager
 				'footer'		=> $embed->footer->text,
 				'image'			=> $embed->image->url,
 				'video'			=> $embed->video->url,
-				'timestamp'		=> $embed->timestamp ? $embed->timestamp->getTimestamp() : null
+				'timestamp'		=> ($embed->timestamp ? $embed->timestamp->getTimestamp() : null)
 			]);
 			$embed_id = $db->id();
 			
