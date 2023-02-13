@@ -123,25 +123,26 @@ Class Manager
 		$message_id = $db->id();
 		
 		foreach($message->embeds as $embed) {
-			$db->insert('embeds', [
-				'message_id'	=> $message_id,
-				'url'			=> $embed->url,
-				'author'		=> $embed->author->name,
-				'title'			=> $embed->title,
-				'description'	=> $embed->description,
-				'footer'		=> $embed->footer->text,
-				'image'			=> $embed->image->url,
-				'video'			=> $embed->video->url,
-				'timestamp'		=> ($embed->timestamp ? $embed->timestamp->getTimestamp() : null)
-			]);
-			$embed_id = $db->id();
-			
-			foreach($embed->fields as $embedField) {
-				$db->insert('embed_fields', [
-					'embed_id'	=> $embed_id,
-					'name'		=> $embedField->name,
-					'value'		=> $embedField->value
+			if($embed->type == Embed::TYPE_RICH) {
+				$db->insert('embeds', [
+					'message_id'	=> $message_id,
+					'url'			=> $embed->url,
+					'author'		=> $embed->author->name,
+					'title'			=> $embed->title,
+					'description'	=> $embed->description,
+					'footer'		=> $embed->footer->text,
+					'image'			=> $embed->image->url,
+					'timestamp'		=> ($embed->timestamp ? $embed->timestamp->getTimestamp() : null)
 				]);
+				$embed_id = $db->id();
+				
+				foreach($embed->fields as $embedField) {
+					$db->insert('embed_fields', [
+						'embed_id'	=> $embed_id,
+						'name'		=> $embedField->name,
+						'value'		=> $embedField->value
+					]);
+				}
 			}
 		}
 		
@@ -191,7 +192,6 @@ Class Manager
 				if($embed['footer']) $newEmbed->setFooter($embed['footer']);
 				if($embed['image']) $newEmbed->setImage($embed['image']);
 				if($embed['timestamp']) $newEmbed->setTimestamp($embed['timestamp']);
-				if($embed['video']) $newEmbed->video = new Video($bot, ['url'=>$embed['video']]);
 				
 				if($fields = $db->select('embed_fields', '*', ['embed_id'=>$embed['id']])) {
 					foreach($fields as $field) {

@@ -58,7 +58,6 @@ CREATE TABLE `embeds` (
 	`description` VARCHAR(4096) NULL,
 	`footer` VARCHAR(2048) NULL,
 	`image` VARCHAR(250) NULL,
-	`video` VARCHAR(250) NULL,
 	`timestamp` INT(11) NULL,
 	PRIMARY KEY (`id`)
 );
