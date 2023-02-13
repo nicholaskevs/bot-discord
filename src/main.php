@@ -21,13 +21,19 @@ $bot->on('ready', function (Discord $bot) {
 	
 	$bot->on(Event::MESSAGE_CREATE, function (Message $message, Discord $bot) {
 		if($message->author->id != $bot->id) {
-			Manager::saveMessage($message);
+			if($forward = Manager::processMessage($message)) {
+				$newMessage = Manager::buildMessage($forward['message_id'], $bot);
+				$bot->getChannel($forward['discord_id'])->sendMessage($newMessage);
+			}
 		}
 	});
 	
 	$bot->on(Event::MESSAGE_UPDATE, function (Message $message, Discord $bot) {
 		if($message->author->id != $bot->id) {
-			Manager::saveMessage($message);
+			if($forward = Manager::processMessage($message)) {
+				$newMessage = Manager::buildMessage($forward['message_id'], $bot);
+				$bot->getChannel($forward['discord_id'])->sendMessage($newMessage);
+			}
 		}
 	});
 });

@@ -25,6 +25,14 @@ CREATE TABLE `channels` (
 	PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `forwarder`;
+CREATE TABLE `forwarder` (
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`fromChannel_id` INT(11) UNSIGNED NOT NULL,
+	`toChannel_id` INT(11) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
 DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,

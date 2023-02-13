@@ -2,8 +2,11 @@
 
 namespace DiscordBot\Lib;
 
+use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
+use Discord\Parts\Embed\Embed;
+use Discord\Parts\Embed\Video;
 use Medoo\Medoo;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
@@ -57,12 +60,24 @@ Class Manager
 		$bot->getLogger()->info('channel updated', ['totalChannel'=>count($channels), 'updated'=>$updated]);
 	}
 	
-	public static function saveMessage(Message $message) {
+	public static function processMessage(Message $message) {
 		$db = self::dbConnect();
 		
-		$channel_id = $db->get('channels', 'id', ['discord_id'=>$message->channel_id]);
+		$channel = $db->get('forwarder', [
+			'[>]channels (from)'	=> [
+				'fromChannel_id'=>'id'
+			],
+			'[>]channels (to)'		=> [
+				'toChannel_id' => 'id'
+			]
+		], [
+			'from.id',
+			'to.discord_id'
+		], [
+			'from.discord_id' => $message->channel_id
+		]);
 		
-		if(is_null($channel_id)) {
+		if(is_null($channel)) {
 			unset($db);
 			return false;
 		}
@@ -95,7 +110,7 @@ Class Manager
 		}
 		
 		$db->insert('messages', [
-			'channel_id'		=> $channel_id,
+			'channel_id'		=> $channel['id'],
 			'discord_id'		=> $message->id,
 			'author'			=> $message->author->username,
 			'content'			=> $message->content,
@@ -142,6 +157,52 @@ Class Manager
 		}
 		
 		unset($db);
-		return true;
+		return [
+			'message_id'	=> $message_id,
+			'discord_id'	=> $channel['discord_id']
+		];
+	}
+	
+	public static function buildMessage(Int $message_id, Discord $bot) {
+		$db = self::dbConnect();
+		
+		$message = $db->get('messages', '*', ['id'=>$message_id]);
+		$attachments = $db->select('attachments', '*', ['message_id'=>$message_id]);
+		$embeds = $db->select('embeds', '*', ['message_id'=>$message_id]);
+		
+		$newMessage = new MessageBuilder();
+		$newMessage->setContent($message['edited_timestamp'] ? '(Edited) '.$message['content'] : $message['content']);
+		
+		if($attachments) {
+			foreach($attachments as $attachment) {
+				$newMessage->addFileFromContent($attachment['filename'], $attachment['url']);
+			}
+		}
+		
+		if($embeds) {
+			foreach($embeds as $embed) {
+				$newEmbed = new Embed($bot);
+				
+				if($embed['author']) $newEmbed->setAuthor($embed['author']);
+				if($embed['url']) $newEmbed->setURL($embed['url']);
+				if($embed['title']) $newEmbed->setTitle($embed['title']);
+				if($embed['description']) $newEmbed->setDescription($embed['description']);
+				if($embed['footer']) $newEmbed->setFooter($embed['footer']);
+				if($embed['image']) $newEmbed->setImage($embed['image']);
+				if($embed['timestamp']) $newEmbed->setTimestamp($embed['timestamp']);
+				if($embed['video']) $newEmbed->video = new Video($bot, ['url'=>$embed['video']]);
+				
+				if($fields = $db->select('embed_fields', '*', ['embed_id'=>$embed['id']])) {
+					foreach($fields as $field) {
+						$newEmbed->addFieldValues($field['name'], $field['value']);
+					}
+				}
+				
+				$newMessage->addEmbed($newEmbed);
+			}
+		}
+		
+		unset($db);
+		return $newMessage;
 	}
 }
