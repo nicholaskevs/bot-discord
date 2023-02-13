@@ -2,10 +2,8 @@
 
 define('ENV_DEV', true);
 
-define('BOT_NAME', 'DiscordBot');
-define('BOT_TOKEN', 'your_bot_token');
-
-define('GUILD_ID', 'your_guild_id');
+define('BOT_TOKEN_CHATTER', 'your_bot_token');
+define('BOT_TOKEN_LISTENER', 'your_bot_token');
 
 define('DB_HOST', 'your_db_host');
 define('DB_USERNAME', 'your_db_username');

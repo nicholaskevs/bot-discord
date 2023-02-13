@@ -9,33 +9,45 @@ use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
 use Discord\WebSockets\Intents;
 
-$bot = new Discord([
-	'token'		=> BOT_TOKEN,
+$chatter = new Discord([
+	'token'		=> BOT_TOKEN_CHATTER,
 	'intents'	=> Intents::getDefaultIntents() | Intents::MESSAGE_CONTENT,
 	'logger'	=> Manager::createLogger()
 ]);
 
-$bot->on('ready', function (Discord $bot) {
+$chatter->on('ready', function (Discord $chatter) {
 	
-	Manager::updateChannels($bot);
+	$listener = new Discord([
+		'token'		=> BOT_TOKEN_LISTENER,
+		'intents'	=> Intents::getDefaultIntents() | Intents::MESSAGE_CONTENT,
+		'logger'	=> $chatter->getLogger(),
+		'loop'		=> $chatter->getLoop()
+	]);
 	
-	$bot->on(Event::MESSAGE_CREATE, function (Message $message, Discord $bot) {
-		if($message->author->id != $bot->id) {
-			if($forward = Manager::processMessage($message)) {
-				$newMessage = Manager::buildMessage($forward['message_id'], $bot);
-				$bot->getChannel($forward['discord_id'])->sendMessage($newMessage);
+	$listener->on('ready', function (Discord $listener) use ($chatter) {
+	
+		Manager::updateChannels($listener);
+		
+		$listener->on(Event::MESSAGE_CREATE, function (Message $message, Discord $listener) use ($chatter) {
+			if($message->author && $message->author->id != $listener->id && $message->author->id != $chatter->id) {
+				if($forward = Manager::processMessage($message)) {
+					$newMessage = Manager::buildMessage($forward['message_id'], $chatter);
+					$chatter->getChannel($forward['discord_id'])->sendMessage($newMessage);
+				}
 			}
-		}
+		});
+		
+		$listener->on(Event::MESSAGE_UPDATE, function (Message $message, Discord $listener) use ($chatter) {
+			if($message->author && $message->author->id != $listener->id && $message->author->id != $chatter->id) {
+				if($forward = Manager::processMessage($message)) {
+					$newMessage = Manager::buildMessage($forward['message_id'], $chatter);
+					$chatter->getChannel($forward['discord_id'])->sendMessage($newMessage);
+				}
+			}
+		});
 	});
 	
-	$bot->on(Event::MESSAGE_UPDATE, function (Message $message, Discord $bot) {
-		if($message->author->id != $bot->id) {
-			if($forward = Manager::processMessage($message)) {
-				$newMessage = Manager::buildMessage($forward['message_id'], $bot);
-				$bot->getChannel($forward['discord_id'])->sendMessage($newMessage);
-			}
-		}
-	});
+	$listener->run();
 });
 
-$bot->run();
+$chatter->run();
