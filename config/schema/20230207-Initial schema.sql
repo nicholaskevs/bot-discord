@@ -37,8 +37,8 @@ DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`channel_id` INT(11) UNSIGNED NOT NULL,
+	`user_id` INT(11) UNSIGNED NOT NULL,
 	`discord_id` VARCHAR(25) NOT NULL,
-	`author` VARCHAR(100) NOT NULL,
 	`content` VARCHAR(2000) NOT NULL,
 	`type` TINYINT(2) NOT NULL,
 	`flags` INT(11) NULL,

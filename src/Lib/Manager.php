@@ -107,12 +107,13 @@ Class Manager
 				'webhook'		=> ($message->webhook_id ? true : false),
 				'ignore'		=> false
 			]);
+			$user_id = $db->id();
 		}
 		
 		$db->insert('messages', [
 			'channel_id'		=> $channel['id'],
+			'user_id'			=> $user_id,
 			'discord_id'		=> $message->id,
-			'author'			=> $message->author->username,
 			'content'			=> $message->content,
 			'type'				=> $message->type,
 			'flags'				=> $message->flags,
