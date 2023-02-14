@@ -25,26 +25,20 @@ $chatter->on('ready', function (Discord $chatter) {
 	]);
 	
 	$listener->on('ready', function (Discord $listener) use ($chatter) {
-	
+		
+		$messageHandler = function (Message $message, Discord $listener) use ($chatter) {
+			if($message->author && $message->author->id != $listener->id && $message->author->id != $chatter->id) {
+				if($forward = Manager::processMessage($message)) {
+					$newMessage = Manager::buildMessage($forward['message_id'], $chatter);
+					$chatter->getChannel($forward['discord_id'])->sendMessage($newMessage);
+				}
+			}
+		};
+		
 		Manager::updateChannels($listener);
 		
-		$listener->on(Event::MESSAGE_CREATE, function (Message $message, Discord $listener) use ($chatter) {
-			if($message->author && $message->author->id != $listener->id && $message->author->id != $chatter->id) {
-				if($forward = Manager::processMessage($message)) {
-					$newMessage = Manager::buildMessage($forward['message_id'], $chatter);
-					$chatter->getChannel($forward['discord_id'])->sendMessage($newMessage);
-				}
-			}
-		});
-		
-		$listener->on(Event::MESSAGE_UPDATE, function (Message $message, Discord $listener) use ($chatter) {
-			if($message->author && $message->author->id != $listener->id && $message->author->id != $chatter->id) {
-				if($forward = Manager::processMessage($message)) {
-					$newMessage = Manager::buildMessage($forward['message_id'], $chatter);
-					$chatter->getChannel($forward['discord_id'])->sendMessage($newMessage);
-				}
-			}
-		});
+		$listener->on(Event::MESSAGE_CREATE, $messageHandler);
+		$listener->on(Event::MESSAGE_UPDATE, $messageHandler);
 	});
 	
 	$listener->run();

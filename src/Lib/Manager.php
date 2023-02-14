@@ -6,7 +6,6 @@ use Discord\Builders\MessageBuilder;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\Parts\Embed\Embed;
-use Discord\Parts\Embed\Video;
 use Medoo\Medoo;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
