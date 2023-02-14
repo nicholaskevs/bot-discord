@@ -12,15 +12,15 @@ use Discord\WebSockets\Intents;
 $chatter = new Discord([
 	'token'		=> BOT_TOKEN_CHATTER,
 	'intents'	=> Intents::getDefaultIntents() | Intents::MESSAGE_CONTENT,
-	'logger'	=> Bot::createLogger()
+	'logger'	=> Bot::createLogger('ChatterBot')
 ]);
 
 $chatter->on('ready', function (Discord $chatter) {
 	
 	$listener = new Discord([
-		'token'		=> BOT_TOKEN_LISTENER,
+		'token'		=> BOT_TOKEN_CHATTER,
 		'intents'	=> Intents::getDefaultIntents() | Intents::MESSAGE_CONTENT,
-		'logger'	=> $chatter->getLogger(),
+		'logger'	=> Bot::createLogger('ListenerBot'),
 		'loop'		=> $chatter->getLoop()
 	]);
 	

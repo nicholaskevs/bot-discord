@@ -23,12 +23,12 @@ Class Bot
 		]);
 	}
 	
-	public static function createLogger() {
-		$logger = new Logger('Logger');
+	public static function createLogger(String $name = 'Logger') {
+		$logger = new Logger($name);
 		if(ENV_DEV) {
 			$logger->pushHandler(new StreamHandler('php://stdout'));
 		} else {
-			$logger->pushHandler(new RotatingFileHandler('logs/discordbot.log', 7, Logger::INFO));
+			$logger->pushHandler((new RotatingFileHandler("logs/$name.log", 7, Logger::INFO))->setFilenameFormat('{date}-{filename}', 'Y-m-d'));
 		}
 		
 		return $logger;
