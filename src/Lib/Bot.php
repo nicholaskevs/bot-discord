@@ -11,7 +11,7 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-Class Manager
+Class Bot
 {
 	private static function dbConnect() {
 		return new Medoo([
