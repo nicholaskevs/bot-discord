@@ -19,4 +19,5 @@ Simple Discord bot to save message content to database and forward it to other c
 5. Change `cons.php-template` into `cons.php`
 6. Fill in `cons.php` with your data
 7. Run all sql files in `schema` folder
-8. Run `php discordbot.php` or open `discordbot.bat` for windows
+8. Give execute permission with `chmod +x discordbot.php`
+9. Run `./discordbot.php` or open `discordbot.bat` for windows
