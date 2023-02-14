@@ -1,6 +1,6 @@
 # bot-discord
 
-Simple Discord bot to save message content to database
+Simple Discord bot to save message content to database and forward it to other channel using 2 bot instances
 
 ## How to use
 
