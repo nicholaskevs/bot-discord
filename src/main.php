@@ -18,7 +18,7 @@ $chatter = new Discord([
 $chatter->on('ready', function (Discord $chatter) {
 	
 	$listener = new Discord([
-		'token'		=> BOT_TOKEN_CHATTER,
+		'token'		=> BOT_TOKEN_LISTENER,
 		'intents'	=> Intents::getDefaultIntents() | Intents::MESSAGE_CONTENT,
 		'logger'	=> Bot::createLogger('ListenerBot'),
 		'loop'		=> $chatter->getLoop()
